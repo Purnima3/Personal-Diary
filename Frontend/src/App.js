@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 
-import LoginForm from "./Components/LoginForm";
+import LoginForm from "./Components/Login/LoginForm";
+import Patient from "./Components/Patient";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import logo from "./logo.svg";
 
@@ -36,6 +37,7 @@ function App() {
 		<div>
 			<Routes>
 				<Route path="/" element={<LoginForm fun={settle} />} />
+				<Route path="/s8JcN7Q0kD3gT1fH4zYb/" element={<Patient />} />
 			</Routes>
 		</div>
 	);

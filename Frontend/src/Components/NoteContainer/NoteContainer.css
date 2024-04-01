@@ -1,0 +1,13 @@
+.noteContainer {
+	height: 100%;
+}
+.noteContainer h1 {
+	margin-bottom: 10px;
+}
+
+.noteContainer-notes {
+	height: 90%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
