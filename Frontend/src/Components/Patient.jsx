@@ -10,14 +10,6 @@ import Navbar from "./Navbar/Navbar";
 import "./Patient.css";
 
 const App = (props) => {
-	// const navigate = useNavigate();
-	// const handleLogout = async () => {
-	// 	localStorage.removeItem("token");
-	// 	await terms.fun2();
-	// 	props.data.x();
-	// 	navigate("/");
-	// 	window.location.reload();
-	// };
 	const [notes, setNotes] = useState(
 		JSON.parse(localStorage.getItem("notes-app")) || []
 	);
@@ -56,6 +48,24 @@ const App = (props) => {
 
 	useEffect(() => {
 		localStorage.setItem("notes-app", JSON.stringify(notes));
+	}, [notes]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await axios({
+					method: "post",
+					url: "http://localhost:4000/api/notes",
+					data: notes,
+				});
+				// Request succeeded, you can handle success here if needed
+			} catch (error) {
+				console.error("Error sending notes to server:", error);
+				// Handle error
+			}
+		};
+
+		fetchData();
 	}, [notes]);
 
 	return (
