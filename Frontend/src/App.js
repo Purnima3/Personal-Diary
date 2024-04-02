@@ -11,6 +11,7 @@ import axios from "axios";
 import { useState } from "react";
 import Complete from "./Components/Complete";
 import Admin from "./Components/Admin";
+import Dashboard from "./Components/Dashboard";
 
 function App() {
   const navigate = useNavigate();
@@ -44,10 +45,9 @@ function App() {
           element={<Complete data={{ adcss, x }} />}
         />
 
-        <Route
-          path="/admin"
-          element={<Admin data={{ adcss, x }} />}
-        />
+        <Route path="/admin" element={<Admin data={{ adcss, x }} />} />
+
+        <Route path="/dashboard/:userId" element={<Dashboard data={{ adcss, x }} />} />
       </Routes>
     </div>
   );
