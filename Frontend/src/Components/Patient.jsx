@@ -2,10 +2,22 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NoteContainer from "../Components/NoteContainer/NoteContainer";
 import Sidebar from "../Components/Sidebar/Sidebar";
+import { useNavigate } from "react-router-dom";
+import terms from "./Login/terms";
+
+import Navbar from "./Navbar/Navbar";
 
 import "./Patient.css";
 
-const App = () => {
+const App = (props) => {
+	// const navigate = useNavigate();
+	// const handleLogout = async () => {
+	// 	localStorage.removeItem("token");
+	// 	await terms.fun2();
+	// 	props.data.x();
+	// 	navigate("/");
+	// 	window.location.reload();
+	// };
 	const [notes, setNotes] = useState(
 		JSON.parse(localStorage.getItem("notes-app")) || []
 	);

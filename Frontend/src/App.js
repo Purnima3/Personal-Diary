@@ -9,6 +9,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import axios from "axios";
 
 import { useState } from "react";
+import Complete from "./Components/Complete";
 
 function App() {
 	const navigate = useNavigate();
@@ -37,7 +38,10 @@ function App() {
 		<div>
 			<Routes>
 				<Route path="/" element={<LoginForm fun={settle} />} />
-				<Route path="/s8JcN7Q0kD3gT1fH4zYb/" element={<Patient />} />
+				<Route
+					path="/s8JcN7Q0kD3gT1fH4zYb/"
+					element={<Complete data={{ adcss, x }} />}
+				/>
 			</Routes>
 		</div>
 	);

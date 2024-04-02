@@ -1,0 +1,72 @@
+#tuo{
+	color:#D7D7D7;
+	font-family: Copperplate,Copperplate Gothic Light,fantasy; 
+	font-size: 150%;
+	font-weight: bold;
+	align-self: center;
+  }
+  
+  #tex{
+	align-self: flex-end;
+	margin-left: 9%;
+	width: 20%;
+	padding: 1%;
+	display: flex;
+	flex-direction: row;
+	color: #D7D7D7;
+	
+	
+  
+  }
+  
+  #usern{
+	align-self: center;
+	font-weight: bold;
+  }
+  
+  #fir{
+	display: flex;
+	flex-direction: row;
+	width: 70%;
+	
+	
+  }
+
+  .buttona {
+    background-color: #FFC529; /* Yellow background */
+    color: #272D2F; /* Black text color */
+    padding: 10px 10px; /* Adjust padding as needed */
+    border: none; /* Remove default border */
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer; /* Hand cursor on hover */
+    font-weight: bold; /* Bold text */
+  }
+  
+  
+  
+  #log {
+	align-self: center;
+	margin-left: 2%;
+	width: 50%;
+	text-align: center;
+	font-size: 70%;
+	
+  }
+  
+  .imag{
+	width: 75px;
+	height: 75px;
+	
+  }
+  
+  .nav {
+	width: 114vmax;
+	border-bottom-style : solid;
+	
+	border-color: #272D2F;
+	border-top: none ;
+	border-right: none;
+	border-left: none ;
+	background-color: #272D2F;
+	
+  }
