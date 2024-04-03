@@ -59,10 +59,9 @@ function LoginForm(props) {
 			await terms.fun({ name: names, id: ids, role: user_roleId });
 
 			if (user_roleId === 1) {
-				navigate("/Fp0wLkQgHe3iMl7n4NqT");
-			} else if (user_roleId === 3) {
-				navigate("/9v3pUZxEsR2dYr6wGh0I");
-			} else if (user_roleId === 2) {
+				navigate("/admin");
+			} 
+			else if (user_roleId === 2) {
 				navigate("/s8JcN7Q0kD3gT1fH4zYb");
 			}
 		} catch (error) {
