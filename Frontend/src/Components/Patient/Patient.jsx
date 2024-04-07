@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import NoteContainer from "../Components/NoteContainer/NoteContainer";
-import Sidebar from "../Components/Sidebar/Sidebar";
+import NoteContainer from "../NoteContainer/NoteContainer";
+import Sidebar from "../Sidebar/Sidebar";
 import { useNavigate } from "react-router-dom";
-import terms from "./Login/terms";
+import terms from "../Login/terms";
 
-import Navbar from "./Navbar/Navbar";
+import Navbar from "../Navbar/Navbar";
 
 import "./Patient.css";
 
@@ -71,6 +71,7 @@ const App = (props) => {
 	return (
 		<div className="App">
 			<Sidebar addNote={addNote} />
+
 			<NoteContainer
 				notes={notes}
 				deleteNote={deleteNote}

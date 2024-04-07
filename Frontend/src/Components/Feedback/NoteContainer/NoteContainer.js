@@ -16,7 +16,7 @@ function NoteContainer(props) {
 	// console.log(notes);
 	return (
 		<div className="noteContainer ">
-			<h1>Notes ::</h1>
+			<h1>Feedback ::</h1>
 			<div className="noteContainer-notes">
 				{notes?.length > 0 ? (
 					notes.map((item) => (

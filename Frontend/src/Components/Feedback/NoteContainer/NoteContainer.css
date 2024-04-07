@@ -4,12 +4,11 @@
 .noteContainer h1 {
 	margin-bottom: 10px;
 }
-h1 {
-	color: black;
-}
+
 .noteContainer-notes {
-	height: 90%;
+	height: 36%;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 20px;
+	width: 40%;
 }
