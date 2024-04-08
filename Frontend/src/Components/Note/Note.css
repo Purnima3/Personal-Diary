@@ -1,7 +1,6 @@
 .note {
 	padding: 25px;
-	height: 100%;
-	width: 1200px;
+
 	display: flex;
 	flex-direction: column;
 	border: 2px solid red;
@@ -41,7 +40,7 @@
 	cursor: pointer;
 	height: 24px;
 	width: 24px;
-	opacity: 0;
+	/* opacity: 0; */
 	transition: 300ms;
 }
 

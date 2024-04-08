@@ -1,6 +1,6 @@
 import React from "react";
 
-import bin from "../../assets/bin.png";
+import bin from "../../../assets/bin.png";
 
 import "./Note.css";
 
@@ -52,14 +52,7 @@ function Note(props) {
 	};
 
 	return (
-		<div
-			className="note "
-			style={{
-				backgroundColor: props.note.color,
-				width: "3000px",
-				height: "500px",
-			}}
-		>
+		<div className="note " style={{ backgroundColor: props.note.color }}>
 			<textarea
 				className="note_text scroll-content"
 				defaultValue={props.note.text}

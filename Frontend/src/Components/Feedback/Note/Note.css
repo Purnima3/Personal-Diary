@@ -1,0 +1,50 @@
+.note {
+	padding: 25px;
+	height: 100%;
+	width: 1200px;
+	display: flex;
+	flex-direction: column;
+	border: 2px solid red;
+	background-color: aqua;
+	border-radius: 30px;
+}
+
+.note_text {
+	resize: none;
+	flex: 1;
+	outline: none;
+	border: none;
+	background: transparent;
+	font-size: 1rem;
+	line-height: 1.87rem;
+}
+
+.scroll-content {
+	width: 100%; /* Ensure content fills the container */
+	height: 100%; /* Ensure content fills the container */
+	overflow-y: auto; /* Allow vertical scrolling */
+	padding-right: 17px; /* Add space for scrollbar to prevent content from shifting */
+}
+
+/* Optional: Hide scrollbar in Firefox */
+.scroll-content::-webkit-scrollbar {
+	display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+}
+
+.note_footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.note_footer img {
+	cursor: pointer;
+	height: 24px;
+	width: 24px;
+	opacity: 1;
+	transition: 300ms;
+}
+
+/* .note_footer img:hover {
+	opacity: 1;
+} */
