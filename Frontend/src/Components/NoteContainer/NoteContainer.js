@@ -1,6 +1,6 @@
 import React from "react";
 import Note from "../Note/Note";
-
+import Calendar from "../Calendar/Calendar";
 import "./NoteContainer.css";
 
 function NoteContainer(props) {
@@ -31,6 +31,7 @@ function NoteContainer(props) {
 					<h2>No notes Present</h2>
 				)}
 			</div>
+			{/* <Calendar /> */}
 		</div>
 	);
 }

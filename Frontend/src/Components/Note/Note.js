@@ -3,6 +3,7 @@ import React from "react";
 import bin from "../../assets/bin.png";
 
 import "./Note.css";
+import Calendar from "../Calendar/Calendar";
 
 let timer = 500,
 	timeout;
@@ -56,7 +57,7 @@ function Note(props) {
 			className="note "
 			style={{
 				backgroundColor: props.note.color,
-				width: "3000px",
+				width: "300px",
 				height: "500px",
 			}}
 		>

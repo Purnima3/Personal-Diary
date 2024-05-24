@@ -2,6 +2,7 @@
 	/* background-color: red; */
 	font-family: "PP Mori";
 	height: 100vh;
+	width: 100vw;
 	display: flex;
 	gap: 20px;
 	padding: 40px;

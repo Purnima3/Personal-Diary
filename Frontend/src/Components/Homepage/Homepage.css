@@ -1,0 +1,160 @@
+/* src/App.css */
+.App {
+	font-family: Arial, sans-serif;
+	padding: 20px;
+	background-color: #f0f0f0;
+	display: flex;
+	flex-direction: column;
+	width: 69%;
+}
+
+.search-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	width: 30vw;
+}
+
+.search-container input[type="text"] {
+	padding: 8px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 70%;
+}
+
+.search-container button {
+	padding: 8px 16px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 0;
+	transition: background-color 0.3s ease;
+	width: 90px;
+}
+
+.search-container button:hover {
+	background-color: #0056b3;
+}
+
+.cards-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 20px;
+	cursor: pointer;
+}
+
+.card {
+	background-color: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	transition: transform 0.2s ease;
+}
+
+.card:hover {
+	transform: scale(1.05);
+}
+
+.card h2 {
+	font-size: 18px;
+	margin-bottom: 8px;
+}
+
+.card p {
+	font-size: 14px;
+	color: #555;
+}
+
+.card-details-container {
+	margin-top: 20px;
+}
+
+.card-details {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-details h2 {
+	font-size: 24px;
+	margin-bottom: 16px;
+}
+
+.card-details p {
+	font-size: 16px;
+	line-height: 1.6;
+}
+
+.card-details button {
+	padding: 8px 16px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-top: 16px;
+}
+
+.card-details button:hover {
+	background-color: #0056b3;
+}
+
+.note-entry-container {
+	margin-top: 20px;
+}
+
+.note-entry {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.note-entry h2 {
+	font-size: 24px;
+	margin-bottom: 16px;
+}
+
+.note-entry label {
+	font-weight: bold;
+}
+
+.note-entry input[type="text"],
+.note-entry textarea {
+	width: 100%;
+	padding: 8px;
+	font-size: 16px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.button-container {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 16px;
+}
+
+button {
+	padding: 8px 16px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+button:hover {
+	background-color: #0056b3;
+}

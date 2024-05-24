@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NoteContainer from "../NoteContainer/NoteContainer";
 import Sidebar from "../Sidebar/Sidebar";
+import Calendar from "../Calendar/Calendar";
 import { useNavigate } from "react-router-dom";
 import terms from "../Login/terms";
 
 import Navbar from "../Navbar/Navbar";
 
 import "./Patient.css";
+import Homepage from "../Homepage/Homepage";
+import Papp from "../../Papp";
 
 const App = (props) => {
 	const [notes, setNotes] = useState(
@@ -70,13 +73,16 @@ const App = (props) => {
 
 	return (
 		<div className="App">
-			<Sidebar addNote={addNote} />
+			{/* <Sidebar addNote={addNote} />
 
 			<NoteContainer
 				notes={notes}
 				deleteNote={deleteNote}
 				updateText={updateText}
-			/>
+			/> */}
+			{/* <Homepage /> */}
+			<Papp />
+			<Calendar />
 		</div>
 	);
 };
