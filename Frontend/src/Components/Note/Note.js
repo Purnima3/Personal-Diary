@@ -1,6 +1,6 @@
 import React from "react";
 
-import bin from "../../assets/bin.png";
+import bin from "./bin.png";
 
 import "./Note.css";
 import Calendar from "../Calendar/Calendar";

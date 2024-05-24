@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import plus from "../../assets/plus.png";
+import plus from "./plus.png";
 
 import "./Sidebar.css";
 
