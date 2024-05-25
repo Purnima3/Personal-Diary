@@ -22,6 +22,7 @@
     "jwt-decode": "^4.0.0",
     "popper.js": "^1.16.1",
     "postcss": "^8.4.35",
+    "python3": "^0.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-chartjs-2": "^5.2.0",
@@ -62,5 +63,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy":"http://127.0.0.1:5000"
 }
