@@ -134,13 +134,27 @@ app.post("/api/notes", (req, res) => {
 	const csvWriter = createObjectCsvWriter({
 		path: "data.csv",
 		header: [
-			{ id: "tweets", title: "Texts" }, // Change the header to 'tweets'
+			{ id: "date", title: "Date" },
+			{ id: "tweets", title: "Texts" },
 		],
 	});
 
 	// Extract 'text' from 'notes' and format it for CSV
 	const records = notes.map((note) => {
-		return { tweets: note.text }; // Map 'text' from 'notes' to 'tweets' column
+		console.log("Note:", note);
+
+		// Convert the timestamp to a human-readable date string
+		const date = new Date(note.date).toISOString().split("T")[0]; // Example: '2024-05-25'
+
+		// Ensure both properties exist before mapping
+		const tweets = note.content;
+
+		// Debugging: Log the mapped properties
+		console.log("Mapped Record:", { tweets, date });
+		return {
+			date, // Include the 'date' column
+			tweets, // Map 'content' to 'tweets' column
+		};
 	});
 
 	// Write the records to the CSV file
@@ -155,5 +169,34 @@ app.post("/api/notes", (req, res) => {
 			res.status(500).send("Error writing CSV file");
 		});
 });
+
+// app.post("/api/notes", (req, res) => {
+// 	const notes = req.body;
+
+// 	// Define the CSV writer and specify the file path and CSV header
+// 	const csvWriter = createObjectCsvWriter({
+// 		path: "data.csv",
+// 		header: [
+// 			{ id: "tweets", title: "Texts" }, // Change the header to 'tweets'
+// 		],
+// 	});
+
+// 	// Extract 'text' from 'notes' and format it for CSV
+// 	const records = notes.map((note) => {
+// 		return { tweets: note.text }; // Map 'text' from 'notes' to 'tweets' column
+// 	});
+
+// 	// Write the records to the CSV file
+// 	csvWriter
+// 		.writeRecords(records)
+// 		.then(() => {
+// 			console.log("Data written to CSV file successfully");
+// 			res.send("Notes received and stored in CSV file successfully");
+// 		})
+// 		.catch((err) => {
+// 			console.error("Error writing CSV file:", err);
+// 			res.status(500).send("Error writing CSV file");
+// 		});
+// });
 
 module.exports = router;

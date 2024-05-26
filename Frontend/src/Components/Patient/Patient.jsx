@@ -14,7 +14,8 @@ import Papp from "../../Papp";
 
 const App = (props) => {
 	const [notes, setNotes] = useState(
-		JSON.parse(localStorage.getItem("notes-app")) || []
+		// JSON.parse(localStorage.getItem("notes-app")) || []
+		JSON.parse(localStorage.getItem("diary")) || []
 	);
 
 	const addNote = (color) => {
@@ -50,7 +51,8 @@ const App = (props) => {
 	};
 
 	useEffect(() => {
-		localStorage.setItem("notes-app", JSON.stringify(notes));
+		// localStorage.setItem("notes-app", JSON.stringify(notes));
+		localStorage.setItem("diary", JSON.stringify(notes));
 	}, [notes]);
 
 	useEffect(() => {
