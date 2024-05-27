@@ -1,56 +1,69 @@
-'use strict';
-
-const fs = require('fs');
-const path = require('path');
-const csv = require('csv-parser');
-const moment = require('moment');
-
+("use strict");
+const bcrypt = require("bcrypt");
+const hashu = async (pass) => {
+	return bcrypt.hash(pass, 10);
+};
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    const results = [];
+	async up(queryInterface, Sequelize) {
+		await queryInterface.bulkInsert(
+			"userpost",
+			[
+				{
+					userid: 1,
+					text: "im feeling quite sad and sorry for myself but ill snap out of it soon",
+					date: "2023-09-09",
+					emotion: "sadness",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 
-    return new Promise((resolve, reject) => {
-      fs.createReadStream(path.join(__dirname, 'output_data.csv'))
-        .pipe(csv())
-        .on('data', (data) => {
-          // Check if Date field is empty
-          if (!data.Date) {
-            console.log('Skipping row with empty Date field');
-            return;
-          }
+				{
+					userid: 1,
+					text: "i feel like i am still looking at a blank canvas blank pieces of paper",
+					date: "2023-07-13",
+					emotion: "sadness",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 
-          console.log('Raw data:', data);
-          console.log('Date value:', data.Date);
+				{
+					userid: 1,
+					text: "i feel like a faithful servant",
+					date: "2024-04-14",
+					emotion: "love",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 
-          results.push(data);
-        })
-        .on('end', () => {
-          const records = results.map(row => {
-            // Parse Date field
-            const parsedDate = moment(row.Date, 'YYYY-MM-DD');
-            if (!parsedDate.isValid()) {
-              console.error(`Invalid date format: ${row.Date}`);
-              return null; // Return null for invalid date
-            }
-            return {
-              userid: row.Userid,
-              text: row.Sentence,
-              date: parsedDate.toDate(),
-              emotion: row.Emotion,
-              createdAt: new Date(),
-              updatedAt: new Date()
-            };
-          }).filter(record => record !== null); // Filter out records with invalid dates
-          
-          queryInterface.bulkInsert('UserPosts', records, {})
-            .then(resolve)
-            .catch(reject);
-        })
-        .on('error', reject);
-    });
-  },
+				{
+					userid: 1,
+					text: "i am just feeling cranky and blue",
+					date: "2024-01-22",
+					emotion: "anger",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('UserPosts', null, {});
-  }
+				{
+					userid: 2,
+					text: "i can have for a treat or if i am feeling festive",
+					date: "2023-06-13",
+					emotion: "joy",
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+			],
+			{}
+		);
+	},
+
+	async down(queryInterface, Sequelize) {
+		/**
+		 * Add commands to revert seed here.
+		 *
+		 * Example:
+		 * await queryInterface.bulkDelete('People', null, {});
+		 */
+	},
 };

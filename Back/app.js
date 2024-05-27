@@ -12,7 +12,7 @@ const { createObjectCsvWriter } = require("csv-writer");
 const app = express();
 const port = 4000;
 app.use(cors());
-
+const { pool } = require("./db");
 // Parse JSON bodies
 app.use(bodyParser.json());
 
@@ -127,76 +127,72 @@ app.post("/login", async (req, res) => {
 // 		});
 // });
 
-app.post("/api/notes", (req, res) => {
+app.post("/api/notes", async (req, res) => {
 	const notes = req.body;
+
+	if (notes.length === 0) {
+		return res.status(400).send("No notes provided");
+	}
+
+	// Log the latest note for debugging
+	Rnotes = notes.reverse();
+	const latestNote = notes[Rnotes.length - 1];
+	console.log(notes.length);
+	console.log("Latest note to be processed: ", latestNote);
 
 	// Define the CSV writer and specify the file path and CSV header
 	const csvWriter = createObjectCsvWriter({
 		path: "data.csv",
 		header: [
-			{ id: "date", title: "Date" },
 			{ id: "tweets", title: "Texts" },
+			{ id: "date", title: "Date" },
 		],
 	});
 
-	// Extract 'text' from 'notes' and format it for CSV
-	const records = notes.map((note) => {
-		console.log("Note:", note);
+	// Extract 'content' and 'date' from the latest note and format it for CSV
+	const date = new Date(latestNote.date).toISOString().split("T")[0];
+	const record = { tweets: latestNote.content, date: date };
 
-		// Convert the timestamp to a human-readable date string
-		const date = new Date(note.date).toISOString().split("T")[0]; // Example: '2024-05-25'
+	// Write the record to the CSV file
+	try {
+		await csvWriter.writeRecords([record]);
+		console.log("Data written to CSV file successfully");
 
-		// Ensure both properties exist before mapping
-		const tweets = note.content;
+		// Check if the latest note already exists in the database
+		const existingNote = await pool.query(
+			"SELECT * FROM UserPost WHERE userid = $1",
+			[latestNote.id]
+		);
 
-		// Debugging: Log the mapped properties
-		console.log("Mapped Record:", { tweets, date });
-		return {
-			date, // Include the 'date' column
-			tweets, // Map 'content' to 'tweets' column
-		};
-	});
+		if (existingNote.rowCount === 0) {
+			const result = await pool.query(
+				'INSERT INTO UserPost (userid, text, date, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+				[
+					latestNote.id,
+					latestNote.content,
+					new Date(latestNote.date),
+					latestNote.emotion,
+					new Date(),
+					new Date(),
+				]
+			);
 
-	// Write the records to the CSV file
-	csvWriter
-		.writeRecords(records)
-		.then(() => {
-			console.log("Data written to CSV file successfully");
-			res.send("Notes received and stored in CSV file successfully");
-		})
-		.catch((err) => {
-			console.error("Error writing CSV file:", err);
-			res.status(500).send("Error writing CSV file");
-		});
+			console.log("Inserted note: ", result.rows[0]);
+			res.status(201).json(result.rows[0]);
+		} else {
+			console.log("Exist: ", existingNote);
+			console.log("Note already exists, skipping insertion");
+			res.status(200).send("Note already exists, skipping insertion");
+		}
+	} catch (err) {
+		console.error(
+			"Error writing CSV file or inserting data into the database:",
+			err
+		);
+		res
+			.status(500)
+			.send("Error writing CSV file or inserting data into the database");
+	}
 });
-
-// app.post("/api/notes", (req, res) => {
-// 	const notes = req.body;
-
-// 	// Define the CSV writer and specify the file path and CSV header
-// 	const csvWriter = createObjectCsvWriter({
-// 		path: "data.csv",
-// 		header: [
-// 			{ id: "tweets", title: "Texts" }, // Change the header to 'tweets'
-// 		],
-// 	});
-
-// 	// Extract 'text' from 'notes' and format it for CSV
-// 	const records = notes.map((note) => {
-// 		return { tweets: note.text }; // Map 'text' from 'notes' to 'tweets' column
-// 	});
-
-// 	// Write the records to the CSV file
-// 	csvWriter
-// 		.writeRecords(records)
-// 		.then(() => {
-// 			console.log("Data written to CSV file successfully");
-// 			res.send("Notes received and stored in CSV file successfully");
-// 		})
-// 		.catch((err) => {
-// 			console.error("Error writing CSV file:", err);
-// 			res.status(500).send("Error writing CSV file");
-// 		});
-// });
 
 module.exports = router;
