@@ -1,33 +1,29 @@
-from flask import Flask
-
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # This will enable CORS for all routes
 
-@app.route('/flask_api/ml')
-def predict():
-    # Load the iris dataset
-    iris = datasets.load_iris()
-    X = iris.data  # Features
-    y = iris.target  # Target variable
+# In-memory storage for notes
+notes_storage = []
 
-    # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+@app.route('/apis/notes', methods=['POST'])
+def save_notes():
+    try:
+        # Get the data from the request
+        notes = request.json
 
-    # Create a K-Nearest Neighbors classifier
-    knn = KNeighborsClassifier(n_neighbors=3)
+        # Save notes to in-memory storage (or database)
+        notes_storage.clear()
+        notes_storage.extend(notes)
 
-    # Train the classifier
-    knn.fit(X_train, y_train)
+        return notes, 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-    # Make predictions on the test set
-    y_pred = knn.predict(X_test)
+@app.route('/api/notes', methods=['GET'])
+def get_notes():
+    return jsonify(notes_storage), 200
 
-    # Print the accuracy of the model
-    accuracy = knn.score(X_test, y_test)
-
-    return{'accuracy': accuracy}
-
-
+if __name__ == '__main__':
+    app.run(debug=True)
