@@ -60,6 +60,7 @@
 	position: fixed;
 	border-color: #272d2f;
 	border-top: none;
+	top: 0px;
 	border-right: none;
 	border-left: none;
 	background-color: #272d2f;

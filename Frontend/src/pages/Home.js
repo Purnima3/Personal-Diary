@@ -5,23 +5,14 @@ import MyHeader from "./../Pcomponents/MyHeader";
 import MyButton from "./../Pcomponents/MyButton";
 import DiaryList from "./../Pcomponents/DiaryList";
 
-const Home = () => {
+const Home = ({ headText }) => {
 	const diaryList = useContext(DiaryStateContext);
 
 	const [data, setData] = useState([]);
 	const [curDate, setCurDate] = useState(new Date());
-	const headText = `${curDate.getFullYear()} - ${
-		curDate.getMonth() + 1
-	} - ${curDate.getDate()}`;
-
-	useEffect(() => {
-		const titleElement = document.getElementsByTagName("title")[0];
-		titleElement.innerHTML = `Emotional Diary`;
-	}, []);
 
 	useEffect(() => {
 		if (diaryList.length >= 1) {
-			console.log(diaryList.length);
 			const todayStart = new Date(
 				curDate.getFullYear(),
 				curDate.getMonth(),

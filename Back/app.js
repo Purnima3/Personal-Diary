@@ -127,6 +127,8 @@ app.post("/login", async (req, res) => {
 // 		});
 // });
 
+const UserPost = require("./models/userpost");
+
 app.post("/api/notes", async (req, res) => {
 	const notes = req.body;
 
@@ -158,19 +160,26 @@ app.post("/api/notes", async (req, res) => {
 		await csvWriter.writeRecords([record]);
 		console.log("Data written to CSV file successfully");
 
-		// Check if the latest note already exists in the database
+		// Check if the latest note already exists in the database with the same createdAt time
+		// Check if the latest note already exists in the database with the same createdAt time
 		const existingNote = await pool.query(
-			"SELECT * FROM UserPost WHERE userid = $1",
-			[latestNote.id]
+			'SELECT * FROM UserPost WHERE userid = $1 OR "createdAt" = $2',
+			[latestNote.id, latestNote.createdAt]
 		);
 
+		const noteDate = new Date(latestNote.date);
+
+		// Format the date to include the time component in ISO format
+		const formattedDate = noteDate.toISOString();
+
+		console.log("dateee ", formattedDate);
 		if (existingNote.rowCount === 0) {
 			const result = await pool.query(
 				'INSERT INTO UserPost (userid, text, date, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
 				[
 					latestNote.id,
 					latestNote.content,
-					new Date(latestNote.date),
+					formattedDate,
 					latestNote.emotion,
 					new Date(),
 					new Date(),
