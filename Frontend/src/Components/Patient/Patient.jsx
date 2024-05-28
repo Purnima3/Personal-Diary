@@ -76,7 +76,7 @@ const App = (props) => {
 	useEffect(() => {
         const sendData = async () => {
             try {
-                const response = await axios.post('http://127.0.0.1:5000/', notes, {
+                const response = await axios.post('http://localhost:5000/apis/notes', notes, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
