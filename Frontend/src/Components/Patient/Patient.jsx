@@ -73,6 +73,25 @@ const App = (props) => {
 		fetchData();
 	}, [notes]);
 
+	useEffect(() => {
+        const sendData = async () => {
+            try {
+                const response = await axios.post('http://localhost:5000/apis/notes', notes, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log('Notes sent to server:', response.data);
+            } catch (error) {
+                console.error('Error sending notes to server:', error);
+            }
+        };
+
+        if (notes.length > 0) {
+            sendData();
+        }
+    }, [notes]);
+
 	return (
 		<div className="App">
 			{/* <Sidebar addNote={addNote} />
