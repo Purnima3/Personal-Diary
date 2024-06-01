@@ -8,6 +8,7 @@ import React, {
 import { useNavigate } from "react-router-dom";
 import { DiaryDispatchContext } from "../App.js";
 import "./styles.css";
+import axios from "axios";
 
 import MyHeader from "./MyHeader";
 import MyButton from "./MyButton";
@@ -21,6 +22,10 @@ const DiaryEditor = ({ isEdit, originData }) => {
 	const [content, setContent] = useState("");
 	const [emotion, setEmotion] = useState(3);
 	const [date, setDate] = useState(getStringDate(new Date()));
+	const [notes, setNotes] = useState(
+		// JSON.parse(localStorage.getItem("notes-app")) || []
+		JSON.parse(localStorage.getItem("diary")) || []
+	);
 
 	const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
 	const handleClickEmote = useCallback((emotion) => {
@@ -51,8 +56,18 @@ const DiaryEditor = ({ isEdit, originData }) => {
 		navigate("/s8JcN7Q0kD3gT1fH4zYb", { replace: true });
 	};
 
-	const handleRemove = () => {
+	const handleRemove = async () => {
 		if (window.confirm("Are you sure you want to delete?")) {
+			try {
+				await axios.delete(
+					`http://localhost:4000/api/delNotes/${originData.id}`
+				);
+			} catch (error) {
+				console.error("Error deleting note from server:", error);
+			}
+			const updatedNotes = notes.filter((note) => note.id !== originData.id);
+			setNotes(updatedNotes);
+			localStorage.setItem("diary", JSON.stringify(updatedNotes));
 			onRemove(originData.id);
 			navigate("/s8JcN7Q0kD3gT1fH4zYb", { replace: true });
 		}

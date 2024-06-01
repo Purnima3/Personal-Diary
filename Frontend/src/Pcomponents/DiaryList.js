@@ -30,10 +30,12 @@ const ControlMenu = React.memo(({ value, onChange, optionList }) => {
 	);
 });
 
-const DiaryList = ({ diaryList }) => {
+const DiaryList = ({ diaryList, user }) => {
 	const navigate = useNavigate();
 	const [sortType, setSortType] = useState("latest");
 	const [filter, setFilter] = useState("all");
+
+	// const filteredDiaryList = diaryList.filter((item) => item.userId === user.id);
 
 	const getProcessedDiaryList = () => {
 		const filterCallBack = (item) => {

@@ -112,38 +112,24 @@ app.post("/login", async (req, res) => {
 	});
 });
 
-// app.post("/api/notes", (req, res) => {
-// 	const notes = req.body;
-
-// 	// Define the CSV writer and specify the file path and CSV header
-// 	const csvWriter = createObjectCsvWriter({
-// 		path: "data.csv",
-// 		header: [
-// 			{ id: "id", title: "ID" },
-// 			{ id: "text", title: "Text" },
-// 			{ id: "time", title: "Time" },
-// 			{ id: "color", title: "Color" },
-// 			// Add more headers as needed based on your data structure
-// 		],
-// 	});
-
-// 	// Write the JSON data to the CSV file
-// 	csvWriter
-// 		.writeRecords(notes)
-// 		.then(() => {
-// 			console.log("Data written to CSV file successfully");
-// 			res.send("Notes received and stored in CSV file successfully");
-// 		})
-// 		.catch((err) => {
-// 			console.error("Error writing CSV file:", err);
-// 			res.status(500).send("Error writing CSV file");
-// 		});
-// });
-
 const UserPost = require("./models/userpost");
 
+// app.get("/api/fetchDiary", async (req, res) => {
+// 	const user = req.body;
+// 	try {
+// 		const fetchedData = await pool.query(
+// 			"SELECT * FROM UserPost WHERE userid = $1 ",
+// 			[user]
+// 		);
+// 	} catch (err) {
+// 		console.error("Error fetching data:", error);
+// 		res.status(500).json({ error: "Internal server error" });
+// 	}
+// });
+
 app.post("/api/notes", async (req, res) => {
-	const notes = req.body;
+	console.log("aagyyaaa");
+	const { notes, user } = req.body;
 
 	if (notes.length === 0) {
 		return res.status(400).send("No notes provided");
@@ -152,7 +138,7 @@ app.post("/api/notes", async (req, res) => {
 	// Log the latest note for debugging
 	Rnotes = notes.reverse();
 	const latestNote = notes[Rnotes.length - 1];
-	console.log(notes.length);
+	console.log("USerrr iididi ", user);
 	console.log("Latest note to be processed: ", latestNote);
 
 	// Define the CSV writer and specify the file path and CSV header
@@ -175,10 +161,22 @@ app.post("/api/notes", async (req, res) => {
 
 		// Check if the latest note already exists in the database with the same createdAt time
 		// Check if the latest note already exists in the database with the same createdAt time
-		const existingNote = await pool.query(
-			'SELECT * FROM UserPost WHERE userid = $1 OR "createdAt" = $2',
-			[latestNote.id, latestNote.createdAt]
-		);
+		const existingNoteQuery = `
+    SELECT *
+    FROM UserPost up
+    LEFT JOIN (
+        SELECT 1 AS note_exists
+        FROM UserPost
+        WHERE noteid = $1
+    ) AS subquery ON up.noteid = $1
+    WHERE up.userid = $2 OR up."createdAt" = $3
+`;
+
+		const existingNote = await pool.query(existingNoteQuery, [
+			latestNote.id,
+			user,
+			latestNote.createdAt,
+		]);
 
 		const noteDate = new Date(latestNote.date);
 
@@ -186,11 +184,16 @@ app.post("/api/notes", async (req, res) => {
 		const formattedDate = noteDate.toISOString();
 
 		console.log("dateee ", formattedDate);
-		if (existingNote.rowCount === 0) {
+
+		if (
+			existingNote.rowCount === 0 ||
+			!existingNote.rows.some((row) => row.note_exists)
+		) {
 			const result = await pool.query(
-				'INSERT INTO UserPost (userid, text, date, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+				'INSERT INTO UserPost (noteid, userid, text, date, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6 , $7) RETURNING *',
 				[
 					latestNote.id,
+					user,
 					latestNote.content,
 					formattedDate,
 					latestNote.emotion,
@@ -217,4 +220,27 @@ app.post("/api/notes", async (req, res) => {
 	}
 });
 
+app.delete("/api/delNotes/:id", async (req, res) => {
+	const { id } = req.params; // Extract the ID from the URL path
+	console.log("Indifr daelete api ");
+	try {
+		// Attempt to find the data by its ID and delete it
+		// const deletedData = await UserPost.destroy({ where: { id: id } });
+		const deletedData = await pool.query(
+			"DELETE FROM UserPost WHERE noteid = $1 ",
+			[id]
+		);
+		if (deletedData) {
+			// If data was deleted successfully
+			res.status(200).json({ message: "Data deleted successfully" });
+		} else {
+			// If no data was found with the provided ID
+			res.status(404).json({ error: "Data not found" });
+		}
+	} catch (error) {
+		// If an error occurred during the deletion process
+		console.error("Error deleting data:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
 module.exports = router;
