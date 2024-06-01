@@ -11,6 +11,10 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
+			noteid: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+			},
 			userid: {
 				type: Sequelize.INTEGER,
 				allowNull: false,

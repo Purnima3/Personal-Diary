@@ -4,7 +4,7 @@ import NoteContainer from "../NoteContainer/NoteContainer";
 import Sidebar from "../Sidebar/Sidebar";
 import Calendar from "../Calendar/Calendar";
 import { useNavigate } from "react-router-dom";
-import terms from "../Login/terms";
+import terms from "../../terms";
 
 import Navbar from "../Navbar/Navbar";
 
@@ -58,11 +58,14 @@ const App = (props) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await axios({
-					method: "post",
-					url: "http://localhost:4000/api/notes",
-					data: notes,
+				const user = terms.user;
+				// console.log("NAme", terms.user);
+
+				const response = await axios.post(`http://localhost:4000/api/notes`, {
+					notes,
+					user: user.id,
 				});
+
 				// Request succeeded, you can handle success here if needed
 			} catch (error) {
 				console.error("Error sending notes to server:", error);
@@ -72,25 +75,6 @@ const App = (props) => {
 
 		fetchData();
 	}, [notes]);
-
-	useEffect(() => {
-        const sendData = async () => {
-            try {
-                const response = await axios.post('http://localhost:5000/apis/notes', notes, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                console.log('Notes sent to server:', response.data);
-            } catch (error) {
-                console.error('Error sending notes to server:', error);
-            }
-        };
-
-        if (notes.length > 0) {
-            sendData();
-        }
-    }, [notes]);
 
 	return (
 		<div className="App">
