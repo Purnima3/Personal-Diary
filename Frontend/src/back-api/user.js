@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/users"; // Adjust the URL based on your server configuration
+const API_URL = "http://localhost:4000/users"; // Adjust the URL based on your server configuration
 
 export const getUsers = async () => {
     try {
