@@ -7,7 +7,6 @@ const bcrypt = require("bcrypt"); // Add bcrypt module
 const bodyParser = require("body-parser");
 const csvParser = require("csv-parser");
 const { createObjectCsvWriter } = require("csv-writer");
-const User = require("./models/User_data.js");
 
 // Enable CORS
 const app = express();
@@ -16,7 +15,6 @@ app.use(cors());
 const { pool } = require("./db");
 // Parse JSON bodies
 app.use(bodyParser.json());
-app.use(express.json());
 
 // const {Server} = require('socket.io');
 const { sequelize } = require("./db.js");
@@ -26,7 +24,7 @@ const hash = (pass) => {
 };
 
 const { Op, where } = require("sequelize");
-
+const User = require("./models/User_data.js");
 
 const Role = require("./models/role.js");
 
@@ -45,17 +43,6 @@ const server = app.listen(port, () => {
 });
 
 const router = express.Router();
-
-//users
-app.get("/users", async (req, res) => {
-    try {
-        const users = await User.findAll();
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
 
 app.post("/login", async (req, res) => {
 	const { email, password } = req.body;
