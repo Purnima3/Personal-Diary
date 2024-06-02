@@ -76,6 +76,28 @@ const App = (props) => {
 		fetchData();
 	}, [notes]);
 
+	useEffect(() => {
+		const fetchSentiment = async () => {
+			try {
+				const user = terms.user;
+				// console.log("NAme", terms.user);
+
+				const response = await axios.post(`http://localhost:5002/apis/notes`, {
+					notes,
+					user: user.id,
+				});
+
+				// Request succeeded, you can handle success here if needed
+			} catch (error) {
+				console.error("Error sending notes to server:", error);
+				// Handle error
+			}
+		};
+
+		fetchSentiment();
+	}, [notes]);
+
+
 	return (
 		<div className="App">
 			{/* <Sidebar addNote={addNote} />
