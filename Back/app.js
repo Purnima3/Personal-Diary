@@ -114,6 +114,10 @@ const UserPost = require("./models/userpost");
 // 	}
 // });
 
+
+
+
+
 app.post("/api/notes", async (req, res) => {
 	console.log("aagyyaaa");
 	const { notes, user } = req.body;
