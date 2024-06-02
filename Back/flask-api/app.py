@@ -12,7 +12,11 @@ CORS(app)  # This will enable CORS for all routes
 # Define your routes here
 @app.route('/apis/notes', methods=['POST'])
 def analyze_notes():
+    print("hi")
+    
     data = request.json
+    print(data)
+    
     notes = data.get('notes', [])
     user = data.get('user', '')
 

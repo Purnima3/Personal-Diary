@@ -82,7 +82,7 @@ const App = (props) => {
 				const user = terms.user;
 				// console.log("NAme", terms.user);
 
-				const response = await axios.post(`http://localhost:5002/apis/notes`, {
+				const response = await axios.post(`http://localhost:5000/apis/notes`, {
 					notes,
 					user: user.id,
 				});
