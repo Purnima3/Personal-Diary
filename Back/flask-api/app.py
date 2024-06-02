@@ -12,10 +12,7 @@ CORS(app)  # This will enable CORS for all routes
 # Define your routes here
 @app.route('/apis/notes', methods=['POST'])
 def analyze_notes():
-    print("hi")
-    
     data = request.json
-    print(data)
     
     notes = data.get('notes', [])
     user = data.get('user', '')
@@ -24,12 +21,12 @@ def analyze_notes():
     results = []
 
     for note in notes:
-        text = note['text'].lower()
+        text = note['content'].lower()
         stop_words = set(stopwords.words('english'))
         text_final = ''.join(c for c in text if not c.isdigit())
         processed_text = ' '.join([word for word in text_final.split() if word not in stop_words])
         sentiment_score = sa.polarity_scores(processed_text)
-        compound = round((1 + sentiment_score['compound'])/2, 2)
+        compound = round((1 + sentiment_score['compound']) / 2, 2)
         results.append({
             'id': note['id'],
             'processed_text': processed_text,
@@ -38,7 +35,7 @@ def analyze_notes():
             'neutral': sentiment_score['neu'],
             'compound': compound
         })
-
+    print(results)
     return jsonify({
         'user': user,
         'results': results

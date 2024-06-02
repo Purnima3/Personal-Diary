@@ -17,6 +17,8 @@ const App = (props) => {
 		// JSON.parse(localStorage.getItem("notes-app")) || []
 		JSON.parse(localStorage.getItem("diary")) || []
 	);
+    
+	const [sentimentResults, setSentimentResults] = useState([]);
 
 	const addNote = (color) => {
 		const tempNotes = [...notes];
@@ -86,7 +88,8 @@ const App = (props) => {
 					notes,
 					user: user.id,
 				});
-
+               console.log(response.data.results)
+				setSentimentResults(response.data.results);
 				// Request succeeded, you can handle success here if needed
 			} catch (error) {
 				console.error("Error sending notes to server:", error);
