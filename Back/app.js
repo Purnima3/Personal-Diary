@@ -114,10 +114,6 @@ const UserPost = require("./models/userpost");
 // 	}
 // });
 
-
-
-
-
 app.post("/api/notes", async (req, res) => {
 	console.log("aagyyaaa");
 	const { notes, user } = req.body;
@@ -197,7 +193,7 @@ app.post("/api/notes", async (req, res) => {
 			res.status(201).json(result.rows[0]);
 		} else {
 			console.log("Exist: ", existingNote);
-			console.log("Note already exists, skipping insertion");
+			console.log("Note already exists, skipping insertion", latestNote);
 			res.status(200).send("Note already exists, skipping insertion");
 		}
 	} catch (err) {

@@ -5,24 +5,22 @@ import Sidebar from "../Sidebar/Sidebar";
 import Calendar from "../Calendar/Calendar";
 import { useNavigate } from "react-router-dom";
 import terms from "../../terms";
-
 import Navbar from "../Navbar/Navbar";
-
 import "./Patient.css";
 import Homepage from "../Homepage/Homepage";
 import Papp from "../../Papp";
+import { EmotionProvider } from "../../Pcomponents/EmotionProvider";
+import DiaryItem from "../../Pcomponents/DiaryItem";
 
 const App = (props) => {
 	const [notes, setNotes] = useState(
 		// JSON.parse(localStorage.getItem("notes-app")) || []
 		JSON.parse(localStorage.getItem("diary")) || []
 	);
-    
 	const [sentimentResults, setSentimentResults] = useState([]);
 
 	const addNote = (color) => {
 		const tempNotes = [...notes];
-
 		tempNotes.push({
 			id: Date.now() + "" + Math.floor(Math.random() * 78),
 			text: "",
@@ -34,20 +32,16 @@ const App = (props) => {
 
 	const deleteNote = (id) => {
 		const tempNotes = [...notes];
-
 		const index = tempNotes.findIndex((item) => item.id === id);
 		if (index < 0) return;
-
 		tempNotes.splice(index, 1);
 		setNotes(tempNotes);
 	};
 
 	const updateText = (text, id) => {
 		const tempNotes = [...notes];
-
 		const index = tempNotes.findIndex((item) => item.id === id);
 		if (index < 0) return;
-
 		tempNotes[index].text = text;
 		setNotes(tempNotes);
 	};
@@ -62,19 +56,17 @@ const App = (props) => {
 			try {
 				const user = terms.user;
 				// console.log("NAme", terms.user);
-
 				const response = await axios.post(`http://localhost:4000/api/notes`, {
 					notes,
 					user: user.id,
 				});
-
+				console.log("Response Fetch data : ", response.data);
 				// Request succeeded, you can handle success here if needed
 			} catch (error) {
 				console.error("Error sending notes to server:", error);
 				// Handle error
 			}
 		};
-
 		fetchData();
 	}, [notes]);
 
@@ -83,12 +75,11 @@ const App = (props) => {
 			try {
 				const user = terms.user;
 				// console.log("NAme", terms.user);
-
 				const response = await axios.post(`http://localhost:5000/apis/notes`, {
 					notes,
 					user: user.id,
 				});
-               console.log(response.data.results)
+				const { results } = response.data;
 				setSentimentResults(response.data.results);
 				// Request succeeded, you can handle success here if needed
 			} catch (error) {
@@ -96,23 +87,23 @@ const App = (props) => {
 				// Handle error
 			}
 		};
-
 		fetchSentiment();
 	}, [notes]);
 
-
 	return (
 		<div className="App">
-			{/* <Sidebar addNote={addNote} />
-
-			<NoteContainer
-				notes={notes}
-				deleteNote={deleteNote}
-				updateText={updateText}
-			/> */}
-			{/* <Homepage /> */}
-			<Papp />
-			<Calendar />
+			<EmotionProvider sentimentResults={sentimentResults}>
+				{/* <Sidebar addNote={addNote} />
+        <NoteContainer
+          notes={notes}
+          deleteNote={deleteNote}
+          updateText={updateText}
+        /> */}
+				{/* <Homepage /> */}
+				<Papp />
+				<Calendar />
+				{/* <DiaryItem /> */}
+			</EmotionProvider>
 		</div>
 	);
 };

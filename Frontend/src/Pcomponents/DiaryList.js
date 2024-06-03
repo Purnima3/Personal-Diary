@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyButton from "./MyButton";
 import DiaryItem from "./DiaryItem";
+import useEmotionsContext from "./useEmotionContext";
 
 const sortOptionList = [
 	{ value: "latest", name: "Latest" },
@@ -34,9 +35,8 @@ const DiaryList = ({ diaryList, user }) => {
 	const navigate = useNavigate();
 	const [sortType, setSortType] = useState("latest");
 	const [filter, setFilter] = useState("all");
-
-	// const filteredDiaryList = diaryList.filter((item) => item.userId === user.id);
-
+	const emotions = useEmotionsContext(); // Get emotions data from custom hook
+	console.log("Emooooto ", emotions);
 	const getProcessedDiaryList = () => {
 		const filterCallBack = (item) => {
 			if (filter === "good") {
@@ -59,10 +59,10 @@ const DiaryList = ({ diaryList, user }) => {
 		const copyList = JSON.parse(JSON.stringify(diaryList));
 		const filteredList =
 			filter === "all" ? copyList : copyList.filter((it) => filterCallBack(it));
-
 		const sortedList = filteredList.sort(compare);
 		return sortedList;
 	};
+	const diaryEntries = getProcessedDiaryList();
 
 	return (
 		<div className="DiaryList">
@@ -87,9 +87,12 @@ const DiaryList = ({ diaryList, user }) => {
 					/>
 				</div>
 			</div>
-
-			{getProcessedDiaryList().map((it) => (
-				<DiaryItem key={it.id} {...it} />
+			{diaryEntries.map((it, index) => (
+				<DiaryItem
+					key={it.id}
+					{...it}
+					emotions={emotions[index % emotions.length]}
+				/> // Pass emotions prop
 			))}
 		</div>
 	);

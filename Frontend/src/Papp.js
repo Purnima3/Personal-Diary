@@ -1,11 +1,11 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
-
 import "./Papp.css";
 import Home from "./pages/Home";
 import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
+import { EmotionContext } from "./Pcomponents/EmotionProvider";
 
 const reducer = (state, action) => {
 	let newState = [];
@@ -30,7 +30,6 @@ const reducer = (state, action) => {
 		default:
 			return state;
 	}
-
 	localStorage.setItem("diary", JSON.stringify(newState));
 	return newState;
 };
@@ -40,6 +39,7 @@ export const DiaryDispatchContext = React.createContext();
 
 function Papp() {
 	const [data, dispatch] = useReducer(reducer, []);
+	const emotions = useContext(EmotionContext);
 
 	useEffect(() => {
 		const localData = localStorage.getItem("diary");
@@ -47,7 +47,6 @@ function Papp() {
 			const diaryList = JSON.parse(localData).sort(
 				(a, b) => parseInt(b.id) - parseInt(a.id)
 			);
-
 			if (diaryList.length >= 1) {
 				dataId.current = parseInt(diaryList[0].id) + 1;
 				dispatch({ type: "INIT", data: diaryList });
@@ -56,6 +55,7 @@ function Papp() {
 	}, []);
 
 	const dataId = useRef(0);
+
 	// CREATE
 	const onCreate = (date, content, emotion) => {
 		dispatch({
@@ -69,10 +69,12 @@ function Papp() {
 		});
 		dataId.current += 1;
 	};
+
 	// REMOVE
 	const onRemove = (targetId) => {
 		dispatch({ type: "REMOVE", targetId });
 	};
+
 	// EDIT
 	const onEdit = (targetId, date, content, emotion) => {
 		dispatch({
@@ -93,16 +95,22 @@ function Papp() {
 					onCreate,
 					onEdit,
 					onRemove,
+					emotions, // Pass the emotions data here
 				}}
 			>
 				<div className="papp">
+					{/* <ul>
+						{emotions.map((emotion, index) => (
+							<li key={index}>{emotion}</li>
+						))}
+					</ul> */}
 					<Home />
 					{/* <Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/new" element={<New />} />
-						<Route path="/edit/:id" element={<Edit />} />
-						<Route path="/diary/:id" element={<Diary />} />
-					</Routes> */}
+            <Route path="/" element={<Home />} />
+            <Route path="/new" element={<New />} />
+            <Route path="/edit/:id" element={<Edit />} />
+            <Route path="/diary/:id" element={<Diary />} />
+          </Routes> */}
 				</div>
 			</DiaryDispatchContext.Provider>
 		</DiaryStateContext.Provider>

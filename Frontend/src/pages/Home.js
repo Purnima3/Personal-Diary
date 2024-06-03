@@ -60,7 +60,7 @@ const Home = () => {
 				leftChild={<MyButton text={"<"} onClick={decreaseDate} />}
 				rightChild={<MyButton text={">"} onClick={increaseDate} />}
 			/>
-			{console.log(data)}
+			{/* {console.log(data)} */}
 			<DiaryList diaryList={data} user={terms.user} />
 		</div>
 	);
