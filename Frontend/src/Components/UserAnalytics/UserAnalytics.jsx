@@ -27,8 +27,10 @@ function UserAnalytics(props) {
 			case "2":
 				return "Happy";
 			case "3":
-				return "Depressed";
+				return "Neutral";
 			case "4":
+				return "Depressed";
+			case "5":
 				return "Sad";
 			// Add more cases for other emotion values
 			default:

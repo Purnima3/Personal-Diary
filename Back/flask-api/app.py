@@ -49,7 +49,7 @@ def analyze_notes():
             'emotion': emotion
         })
 
-    print(results)
+    print("reS" , results)
     return jsonify({'user': user, 'results': results})
 
 if __name__ == "__main__":

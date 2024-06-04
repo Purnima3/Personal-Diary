@@ -115,7 +115,6 @@ const UserPost = require("./models/userpost");
 // });
 
 app.post("/api/notes", async (req, res) => {
-	console.log("aagyyaaa");
 	const { notes, user } = req.body;
 
 	if (notes.length === 0) {
@@ -125,8 +124,6 @@ app.post("/api/notes", async (req, res) => {
 	// Log the latest note for debugging
 	Rnotes = notes.reverse();
 	const latestNote = notes[Rnotes.length - 1];
-	console.log("USerrr iididi ", user);
-	console.log("Latest note to be processed: ", latestNote);
 
 	// Define the CSV writer and specify the file path and CSV header
 	const csvWriter = createObjectCsvWriter({
@@ -170,7 +167,7 @@ app.post("/api/notes", async (req, res) => {
 		// Format the date to include the time component in ISO format
 		const formattedDate = noteDate.toISOString();
 
-		console.log("dateee ", formattedDate);
+		// console.log("Emotion app js ", latestNote.emotion);
 
 		if (
 			existingNote.rowCount === 0 ||
@@ -192,7 +189,7 @@ app.post("/api/notes", async (req, res) => {
 			console.log("Inserted note: ", result.rows[0]);
 			res.status(201).json(result.rows[0]);
 		} else {
-			console.log("Exist: ", existingNote);
+			// console.log("Exist: ", existingNote);
 			console.log("Note already exists, skipping insertion", latestNote);
 			res.status(200).send("Note already exists, skipping insertion");
 		}
@@ -204,6 +201,57 @@ app.post("/api/notes", async (req, res) => {
 		res
 			.status(500)
 			.send("Error writing CSV file or inserting data into the database");
+	}
+});
+app.post("/api/emotions", async (req, res) => {
+	let { noteId, emotion } = req.body;
+
+	console.log("noteId: ", noteId);
+	try {
+		// Check if a record with the given noteId already exists
+		const existingRecord = await pool.query(
+			"SELECT * FROM UserPost WHERE noteid = $1",
+			[noteId]
+		);
+
+		if (existingRecord.rowCount > 0) {
+			// If record exists, update the emotion column
+			if (emotion == 1) {
+				emotion = "Elated";
+			} else if (emotion == 2) {
+				emotion = "Happy";
+			} else if (emotion == 3) {
+				emotion = "Neutral";
+			} else if (emotion == 4) {
+				emotion = "Sad";
+			} else if (emotion == 5) {
+				emotion = "Depressed";
+			}
+			const result = await pool.query(
+				'UPDATE UserPost SET emotion = $2, "updatedAt" = $3 WHERE noteid = $1 RETURNING *',
+				[noteId, emotion, new Date()]
+			);
+
+			console.log("Updated emotion: ", result.rows[0]);
+			res.status(200).json(result.rows[0]);
+		} else {
+			// If no record exists, insert a new one
+			const result = await pool.query(
+				'INSERT INTO UserPost (noteid, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4) RETURNING *',
+				[noteId, emotion, new Date(), new Date()]
+			);
+
+			console.log("Inserted emotion: ", result.rows[0]);
+			res.status(201).json(result.rows[0]);
+		}
+	} catch (error) {
+		console.error(
+			"Error inserting or updating emotion data in the database:",
+			error
+		);
+		res
+			.status(500)
+			.send("Error inserting or updating emotion data in the database");
 	}
 });
 

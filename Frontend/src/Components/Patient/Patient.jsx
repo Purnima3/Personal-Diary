@@ -74,12 +74,13 @@ const App = (props) => {
 		const fetchSentiment = async () => {
 			try {
 				const user = terms.user;
-				// console.log("NAme", terms.user);
+				console.log("NAme", terms.user);
 				const response = await axios.post(`http://localhost:5000/apis/notes`, {
 					notes,
 					user: user.id,
 				});
 				const { results } = response.data;
+				// console.log("Ress ", results);
 				setSentimentResults(response.data.results);
 				// Request succeeded, you can handle success here if needed
 			} catch (error) {
