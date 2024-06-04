@@ -1,9 +1,9 @@
 import React, { useEffect, useReducer, useRef } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import {Switch, Route, Routes, useNavigate } from "react-router-dom";
 import LoginForm from "./Components/Login/LoginForm";
 import Complete from "./Components/Complete";
 import Admin from "./Components/Admin/Admin";
-import Dashboard from "./Components/Dashboard/Dashboard";
+import UserAnalytics from "./Components/UserAnalytics/UserAnalytics";
 import Home from "./pages/Home";
 import New from "./pages/New";
 import Edit from "./pages/Edit";
@@ -132,14 +132,16 @@ function App() {
 							element={<Complete data={{ adcss, x }} />}
 						/>
 						<Route path="/admin" element={<Admin data={{ adcss, x }} />} />
-						<Route
-							path="/dashboard/:userId"
-							element={<Dashboard data={{ adcss, x }} />}
-						/>
+						
 						<Route path="/home" element={<Home />} />
 						<Route path="/new" element={<New />} />
 						<Route path="/edit/:id" element={<Edit />} />
 						<Route path="/diary/:id" element={<Diary />} />
+
+						
+                <Route path="/dashboard/:id" element={<UserAnalytics data={{ adcss, x }}/>} />
+              
+           
 					</Routes>
 				</div>
 			</DiaryDispatchContext.Provider>

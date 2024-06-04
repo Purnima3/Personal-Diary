@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken"); // Add JWT module
 const bcrypt = require("bcrypt"); // Add bcrypt module
+const User = require("./models/User_data.js");
 
 const bodyParser = require("body-parser");
 const csvParser = require("csv-parser");
@@ -24,7 +25,7 @@ const hash = (pass) => {
 };
 
 const { Op, where } = require("sequelize");
-const User = require("./models/User_data.js");
+
 
 const Role = require("./models/role.js");
 
@@ -230,4 +231,38 @@ app.delete("/api/delNotes/:id", async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 });
+
+app.get("/api/users", async (req, res) => {
+    try {
+		console.log("hi")
+
+        const users = await User.findAll();
+		
+        res.json(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "An error occurred while fetching users." });
+    }
+});
+
+app.get("/api/user/:id/emotions", async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const userEmotions = await UserPost.findAll({
+            where: { userid: userId },
+            attributes: ['emotion'] // Include only the 'emotion' column in the response
+        });
+
+        // Extract emotions from the fetched data
+        const emotions = userEmotions.map(emotion => emotion.emotion);
+        console.log(emotions)
+        res.json(emotions);
+    } catch (error) {
+        console.error("Error fetching emotions:", error);
+        res.status(500).json({ error: "An error occurred while fetching emotions." });
+    }
+});
+
+
 module.exports = router;
