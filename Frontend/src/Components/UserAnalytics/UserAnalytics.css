@@ -1,0 +1,15 @@
+.analytics-container {
+    padding: 20px;
+}
+
+.analytics-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.analytics-container li {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
