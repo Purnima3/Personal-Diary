@@ -26,7 +26,6 @@ const hash = (pass) => {
 
 const { Op, where } = require("sequelize");
 
-
 const Role = require("./models/role.js");
 
 User.belongsTo(Role, { targetKey: "roleid", foreignKey: "roleId" });
@@ -233,36 +232,36 @@ app.delete("/api/delNotes/:id", async (req, res) => {
 });
 
 app.get("/api/users", async (req, res) => {
-    try {
-		console.log("hi")
+	try {
+		console.log("hi");
 
-        const users = await User.findAll();
-		
-        res.json(users);
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({ error: "An error occurred while fetching users." });
-    }
+		const users = await User.findAll();
+
+		res.json(users);
+	} catch (error) {
+		console.error("Error fetching users:", error);
+		res.status(500).json({ error: "An error occurred while fetching users." });
+	}
 });
 
 app.get("/api/user/:id/emotions", async (req, res) => {
-    const userId = req.params.id;
+	const userId = req.params.id;
 
-    try {
-        const userEmotions = await UserPost.findAll({
-            where: { userid: userId },
-            attributes: ['emotion'] // Include only the 'emotion' column in the response
-        });
+	try {
+		const userEmotions = await pool.query(
+			"Select emotion from UserPost where userid = $1",
+			[userId]
+		);
+		const emotions = userEmotions.rows.map((row) => row.emotion);
 
-        // Extract emotions from the fetched data
-        const emotions = userEmotions.map(emotion => emotion.emotion);
-        console.log(emotions)
-        res.json(emotions);
-    } catch (error) {
-        console.error("Error fetching emotions:", error);
-        res.status(500).json({ error: "An error occurred while fetching emotions." });
-    }
+		console.log("User:", userId, "Emotions:", emotions);
+		res.json(emotions);
+	} catch (error) {
+		console.error("Error fetching emotions:", error);
+		res
+			.status(500)
+			.json({ error: "An error occurred while fetching emotions." });
+	}
 });
-
 
 module.exports = router;
