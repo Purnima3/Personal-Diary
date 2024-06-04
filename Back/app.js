@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken"); // Add JWT module
 const bcrypt = require("bcrypt"); // Add bcrypt module
+const User = require("./models/User_data.js");
 
 const bodyParser = require("body-parser");
 const csvParser = require("csv-parser");
@@ -24,7 +25,7 @@ const hash = (pass) => {
 };
 
 const { Op, where } = require("sequelize");
-const User = require("./models/User_data.js");
+
 
 const Role = require("./models/role.js");
 
@@ -230,4 +231,18 @@ app.delete("/api/delNotes/:id", async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 });
+
+app.get("/api/users", async (req, res) => {
+    try {
+		console.log("hi")
+
+        const users = await User.findAll();
+		console.log(users)
+        res.json(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "An error occurred while fetching users." });
+    }
+});
+
 module.exports = router;
