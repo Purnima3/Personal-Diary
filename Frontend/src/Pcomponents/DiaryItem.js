@@ -31,7 +31,7 @@ const DiaryItem = ({ id, emotion, content, date, emotions, userId }) => {
 						// emotion: getEmotionCode(emotions),
 					}
 				);
-				console.log("emmm :", emotions);
+				// console.log("emmm :", emotions);
 				console.log("Emotion data sent:", response.data);
 			} catch (error) {
 				console.error("Error sending emotion data:", error);

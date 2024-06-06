@@ -4,6 +4,7 @@ const { sequelize } = require("../db.js");
 const UserPost = sequelize.define("userpost", {
 	noteid: {
 		type: DataTypes.INTEGER,
+		unique: true,
 		allowNull: false,
 	},
 	userid: {

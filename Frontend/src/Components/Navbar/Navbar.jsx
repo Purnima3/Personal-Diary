@@ -20,6 +20,7 @@ const Navbar = (props) => {
 			<div id="fir">
 				<div id="ine"></div>
 				<div id="tuo">PERSONAL DIARY</div>
+				<img src="diary.png" height="50px" width="50px" />
 			</div>
 
 			<div id="tex">

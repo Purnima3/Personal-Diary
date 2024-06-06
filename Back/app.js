@@ -113,7 +113,6 @@ const UserPost = require("./models/userpost");
 // 		res.status(500).json({ error: "Internal server error" });
 // 	}
 // });
-
 app.post("/api/notes", async (req, res) => {
 	const { notes, user } = req.body;
 
@@ -122,7 +121,7 @@ app.post("/api/notes", async (req, res) => {
 	}
 
 	// Log the latest note for debugging
-	Rnotes = notes.reverse();
+	const Rnotes = notes.reverse();
 	const latestNote = notes[Rnotes.length - 1];
 
 	// Define the CSV writer and specify the file path and CSV header
@@ -143,38 +142,18 @@ app.post("/api/notes", async (req, res) => {
 		await csvWriter.writeRecords([record]);
 		console.log("Data written to CSV file successfully");
 
-		// Check if the latest note already exists in the database with the same createdAt time
-		// Check if the latest note already exists in the database with the same createdAt time
-		const existingNoteQuery = `
-    SELECT *
-    FROM UserPost up
-    LEFT JOIN (
-        SELECT 1 AS note_exists
-        FROM UserPost
-        WHERE noteid = $1
-    ) AS subquery ON up.noteid = $1
-    WHERE up.userid = $2 OR up."createdAt" = $3
-`;
-
-		const existingNote = await pool.query(existingNoteQuery, [
-			latestNote.id,
-			user,
-			latestNote.createdAt,
-		]);
+		// Check if the noteId already exists in the UserPost table
+		const existingNoteQuery = "SELECT * FROM UserPost WHERE noteid = $1";
+		const existingNote = await pool.query(existingNoteQuery, [latestNote.id]);
 
 		const noteDate = new Date(latestNote.date);
-
 		// Format the date to include the time component in ISO format
 		const formattedDate = noteDate.toISOString();
 
-		// console.log("Emotion app js ", latestNote.emotion);
-
-		if (
-			existingNote.rowCount === 0 ||
-			!existingNote.rows.some((row) => row.note_exists)
-		) {
+		if (existingNote.rowCount === 0 && user != -1) {
+			// If the noteId doesn't exist, insert the new note
 			const result = await pool.query(
-				'INSERT INTO UserPost (noteid, userid, text, date, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6 , $7) RETURNING *',
+				'INSERT INTO UserPost (noteid, userid, text, date, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
 				[
 					latestNote.id,
 					user,
@@ -189,9 +168,14 @@ app.post("/api/notes", async (req, res) => {
 			console.log("Inserted note: ", result.rows[0]);
 			res.status(201).json(result.rows[0]);
 		} else {
-			// console.log("Exist: ", existingNote);
-			console.log("Note already exists, skipping insertion", latestNote);
-			res.status(200).send("Note already exists, skipping insertion");
+			// If the noteId already exists, skip insertion
+			console.log(
+				"Note with the given noteId already exists, skipping insertion",
+				latestNote
+			);
+			res
+				.status(200)
+				.send("Note with the given noteId already exists, skipping insertion");
 		}
 	} catch (err) {
 		console.error(
@@ -206,7 +190,7 @@ app.post("/api/notes", async (req, res) => {
 app.post("/api/emotions", async (req, res) => {
 	let { noteId, emotion } = req.body;
 
-	console.log("noteId: ", noteId);
+	console.log("noteId: ", noteId, "  emot ", emotion);
 	try {
 		// Check if a record with the given noteId already exists
 		const existingRecord = await pool.query(
@@ -236,13 +220,13 @@ app.post("/api/emotions", async (req, res) => {
 			res.status(200).json(result.rows[0]);
 		} else {
 			// If no record exists, insert a new one
-			const result = await pool.query(
-				'INSERT INTO UserPost (noteid, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4) RETURNING *',
-				[noteId, emotion, new Date(), new Date()]
-			);
+			// const result = await pool.query(
+			// 	'INSERT INTO UserPost (noteid, emotion, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4) RETURNING *',
+			// 	[noteId, emotion, new Date(), new Date()]
+			// );
 
-			console.log("Inserted emotion: ", result.rows[0]);
-			res.status(201).json(result.rows[0]);
+			console.log(" NO Inserted emotion: ");
+			res.status(201).json();
 		}
 	} catch (error) {
 		console.error(

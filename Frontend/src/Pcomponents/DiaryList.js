@@ -36,7 +36,7 @@ const DiaryList = ({ diaryList, user }) => {
 	const [sortType, setSortType] = useState("latest");
 	const [filter, setFilter] = useState("all");
 	const emotions = useEmotionsContext(); // Get emotions data from custom hook
-	console.log("Emooooto ", emotions);
+	console.log("Emooooto ", diaryList);
 	const getProcessedDiaryList = () => {
 		const filterCallBack = (item) => {
 			if (filter === "good") {
