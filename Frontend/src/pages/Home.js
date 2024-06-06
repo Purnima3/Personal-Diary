@@ -5,33 +5,38 @@ import MyHeader from "./../Pcomponents/MyHeader";
 import MyButton from "./../Pcomponents/MyButton";
 import DiaryList from "./../Pcomponents/DiaryList";
 import terms from "../terms";
+
+import { SelectedDateContext } from "../Components/SelectedDay/SelectedDayContext";
+
 const Home = () => {
 	const diaryList = useContext(DiaryStateContext);
-
+	const { selectedDate } = useContext(SelectedDateContext);
+	// console.log("dateee  ", selectedDate);
 	const [data, setData] = useState([]);
 	const [curDate, setCurDate] = useState(new Date());
-	const headText = `${curDate.getFullYear()} - ${
-		curDate.getMonth() + 1
-	} - ${curDate.getDate()}`;
+
+	const dateToUse = selectedDate || curDate;
+	const headText = `${dateToUse.getFullYear()} - ${
+		dateToUse.getMonth() + 1
+	} - ${dateToUse.getDate()}`;
 
 	useEffect(() => {
 		const titleElement = document.getElementsByTagName("title")[0];
 		titleElement.innerHTML = `Emotional Diary`;
 	}, []);
-
 	useEffect(() => {
 		if (diaryList.length >= 1) {
 			console.log(diaryList.length);
-			const todayStart = new Date(
-				curDate.getFullYear(),
-				curDate.getMonth(),
-				curDate.getDate()
-			).getTime();
 
+			const todayStart = new Date(
+				dateToUse.getFullYear(),
+				dateToUse.getMonth(),
+				dateToUse.getDate()
+			).getTime();
 			const todayEnd = new Date(
-				curDate.getFullYear(),
-				curDate.getMonth(),
-				curDate.getDate(),
+				dateToUse.getFullYear(),
+				dateToUse.getMonth(),
+				dateToUse.getDate(),
 				23,
 				59,
 				59
@@ -43,14 +48,14 @@ const Home = () => {
 		} else {
 			setData([]);
 		}
-	}, [diaryList, curDate]);
+	}, [diaryList, selectedDate, curDate]);
 
 	const increaseDate = () => {
-		setCurDate(new Date(curDate.setDate(curDate.getDate() + 1)));
+		setCurDate(new Date(dateToUse.setDate(dateToUse.getDate() + 1)));
 	};
 
 	const decreaseDate = () => {
-		setCurDate(new Date(curDate.setDate(curDate.getDate() - 1)));
+		setCurDate(new Date(dateToUse.setDate(dateToUse.getDate() - 1)));
 	};
 
 	return (

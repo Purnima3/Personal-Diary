@@ -13,6 +13,7 @@ module.exports = {
 			},
 			noteid: {
 				type: Sequelize.INTEGER,
+				unique: true,
 				allowNull: false,
 			},
 			userid: {

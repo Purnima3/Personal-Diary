@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
-import "./Calendar.css"; // Assuming you have corresponding CSS for styling
+// src/components/Calendar.js
+import React, { useEffect, useContext } from "react";
 import $ from "jquery";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "font-awesome/css/font-awesome.min.css";
+import { SelectedDateContext } from "../SelectedDay/SelectedDayContext";
+import "./Calendar.css";
 
 const Calendar = () => {
+	const { setSelectedDate } = useContext(SelectedDateContext);
 	useEffect(() => {
 		(function ($) {
 			"use strict";
@@ -128,7 +131,17 @@ const Calendar = () => {
 				selectedDay = new Date(year, month, o.innerHTML);
 				this.drawHeader(o.innerHTML);
 				this.setCookie("selected_day", 1);
+
+				// Call setSelectedDate here
+				setSelectedDate(selectedDay);
 			};
+
+			// ... (rest of t})(window.jQuery);
+
+			// Calendar.prototype.sendSelectedDate = function (date) {
+			// 	setSelectedDate(date); // Update context value
+			// 	// console.log("Fdateee ", date);
+			// };
 
 			Calendar.prototype.preMonth = function () {
 				if (month < 1) {
@@ -199,15 +212,13 @@ const Calendar = () => {
 
 			var calendar = new Calendar();
 		})(window.jQuery);
-	}, []); // Empty dependency array ensures this effect runs only once
+	}, [setSelectedDate]);
 
 	return (
 		<section className="ftco-section">
 			<div className="container">
 				<div className="row justify-content-center">
-					<div className="col-md-6 text-center mb-5">
-						{/* <h2 className="heading-section">Calendar #02</h2> */}
-					</div>
+					<div className="col-md-6 text-center mb-5"></div>
 				</div>
 				<div className="row">
 					<div className="col-md-12">
