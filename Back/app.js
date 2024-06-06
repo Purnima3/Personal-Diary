@@ -293,11 +293,13 @@ app.get("/api/users", async (req, res) => {
 });
 
 app.get("/api/user/:id/emotions", async (req, res) => {
+	
 	const userId = req.params.id;
+	console.log(userId)
 
 	try {
 		const userEmotions = await pool.query(
-			"Select emotion from UserPost where userid = $1",
+			"SELECT * FROM UserPost WHERE userId = $1",
 			[userId]
 		);
 		const emotions = userEmotions.rows.map((row) => row.emotion);
